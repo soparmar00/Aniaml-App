@@ -1,5 +1,5 @@
 import axios from "axios"
-import { showData } from "./Redux/action";
+import { filterAnimal, showData } from "./Redux/action";
 
 const request = axios.create({
     baseURL: "http://shibe.online/api",
@@ -15,4 +15,16 @@ export const fetchData = () => async (dispatch) => {
         console.log(err);
     }
 
+}
+
+export const filterData = (state) => async (dispatch) => {
+    try {
+        const { record, category } = state
+        const response = await request.get(`${category}?count=${record}`)
+        console.log(response.data)
+        dispatch(filterAnimal({ fetchData: response.data }))
+    }
+    catch (err) {
+        console.log(err);
+    }
 }
