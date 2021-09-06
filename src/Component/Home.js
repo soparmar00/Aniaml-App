@@ -1,30 +1,34 @@
-
-import axios from 'axios';
-import React, {useEffect, useState} from 'react'
+import React, {useEffect} from 'react'
+import { fetchData } from '../Thunk';
+import { useDispatch, useSelector } from "react-redux";
 
 const Home = () => {
 
-    const [api, setApi] = useState([])
- 
-    useEffect(() => {
-        axios.get(`http://shibe.online/api/shibes?count=10`)
-        .then(res=> {
-            console.log(res.data)
-            setApi(res.data)
-        })
-        .catch(err => {
-            console.log(err)
-        })
-        
-    }, [setApi]);
+    const dispatch = useDispatch()
+    const result = useSelector(state => state.animal.fetchData)
+    console.log(result)
 
+    useEffect(() => {
+        dispatch(fetchData())
+    }, [dispatch])
+
+    const recordFields = result.map((fields) => {
+        return (
+            < div >
+            <img src={fields} alt={fields} width="150" height="200" />
+            </div >
+
+        )
+    })
 
     return (
         <div>
-            <h1>Animal List</h1>
-            {api.map(fields => (< div >
-                <img src={fields} alt={fields} width="150" height="200" />
-            </div >))}
+        <h1>Animal List</h1>
+        <br />
+        <br />
+        <div>
+        {recordFields}
+        </div>    
         </div>
     )
 }
